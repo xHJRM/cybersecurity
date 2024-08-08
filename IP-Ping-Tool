@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#Script will display all available IP addresses and allow you to
+#ping the desired IP address as many times as you would like.
+
+echo "The following IP addresses are available:"
+
+arp -a | grep -oP '\(\K[0-9.]+(?=\))'
+
+read -p "Input IP address:" ip_address
+echo $ip_address
+echo "The above IP address" $ip_address "will now be pinged."
+
+read -p "How many times would you like to ping the IP address?" ping_count
+
+ping -c $ping_count $ip_address

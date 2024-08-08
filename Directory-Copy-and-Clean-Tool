@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#Script copies a directory over into a destination directory using only the directory name,
+#not necessitating the path name being known. A functionality offered is deleting the source
+#directory as it may not be needed after copying.
+
+ls
+
+read -p "Please select the directory you would like to copy: " source_directory
+echo "The directory," $source_directory", has been selected."
+read -p "Please select the destination directory: " destination_directory
+echo "The directory," $destination_directory", has been selected."
+
+source_path=$(realpath $source_directory)
+destination_path=$(realpath $destination_directory)
+echo "The real path of the source directory:" $source_path
+echo "The real path of the destination directory:" $destination_directory
+
+cp -r $source_path $destination_path
+
+echo "The new contents of" $destination_directory":"
+ls $destination_path
+
+read -p  "Would you like to delete the source directory (Y/N)? " decision
+decision=$(echo $decision | tr '[:upper:]' '[:lower:]')
+if [ $decision == "y" ]; then
+        read -p "Are you sure? (Y/N) " confirmation_decision
+        confirmation_decision=$(echo $confirmation_decision | tr '[:upper:]' '[:lower:]')
+        if [ $confirmation_decision == "y" ]; then
+                rm -r $source_path
+                echo "Deleted" $source_directory"."
+        else
+                echo "Closing application."
+        fi
+else
+        echo "Closing application!"
+fi

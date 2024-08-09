@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#The script allows the user to input binary files, receive its assembly code counterpart
+#in a .txt file, and search through the binary file for particular strings.
+
+read -p "Insert the name of the binary file: " binary_file_name
+file $binary_file_name
+echo -e  "\nThe above is the type of binary file given."
+
+read -p "Insert the name of the file (must be .txt) to save assembly code to: " assembly_file_name
+objdump -d $binary_file_name > $assembly_file_name
+echo -e  "\nThe assembly code is now on" $assembly_file_name"."
+
+read -p "Would you like to search through the file for particular strings (y/n)? " search_decision
+search_decision=$(echo $search_decision | tr '[:upper:]' '[:lower:]')
+while [ $search_decision == "y" ]
+do
+        read -p  "Insert the string that you would like to search the file for: " grep_string 
+        strings $binary_file_name | grep $grep_string
+        read -p "Would you like to continue searching for new strings (y/n)? " search_decision
+        search_decision=$(echo $search_decision | tr '[:upper:]' '[:lower:]')
+done
+
+echo -e "\n Closing application!"
